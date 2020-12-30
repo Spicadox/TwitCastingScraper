@@ -25,6 +25,7 @@ def arguments():
                         help="The user's chosen absolute save path for the csv file")
 
     args = parser.parse_args()
+    print(args)
     return args
 
 def soupSetup(cleanLink):
@@ -37,17 +38,13 @@ def soupSetup(cleanLink):
     return bSoup
 
 
-def linkCleanUp(args):
-    # if(len(sys.argv) < 2):
-    #     url = input("URL: ")
-    # else:
-    #     url = sys.argv[1]
-    print(args)
-    if(args is not None):
-        url = args
+def linkCleanUp(argLink):
+    if(argLink is not None):
+        url = argLink
     else:
         url = input("URL: ")
-    if("https://" or "http://" not in url):
+    #Take a look at this if statement back in master branch
+    if("https://" not in url and "http://" not in url):
         url = "https://" + url
     if ("/showclips" in url):
         cleanLink = url.split("/showclips")[0]
@@ -77,27 +74,32 @@ def updateLink(baseLink, pageNumber):
     return updatedLink
 
 
-def getDirectory(args):
+def getDirectory(argOutput):
     # if(len(sys.argv) == 4):
     #     directoryPath = sys.argv[3]
-    if(args is not None and args.output):
-        directoryPath = args.output
+    if argOutput is not None:
+        print(argOutput)
+        print(" ".join(argOutput))
+    if(argOutput is not None):
+        # directoryPath = argOutput[0]
+        directoryPath = " ".join(argOutput)
     else:
         directoryPath = os.getcwd()
     return directoryPath
 
 
-def getFileName(soup, cleanLink, args):
+def getFileName(soup, cleanLink, argName):
     # if (len(sys.argv) == 3):
     #     if (".csv" not in sys.argv[2]):
     #         fileName = sys.argv[2] + ".csv"
     #     else:
     #         fileName = sys.argv[2]
-    if(args is not None and args.name):
-        if(".csv" not in args.name):
-            fileName = args.name + ".csv"
+
+    if(argName is not None):
+        if(".csv" not in argName[0]):
+            fileName = "_".join(argName) + ".csv"
         else:
-            fileName = args.name
+            fileName = "_".join(argName)
     else:
         channelName = soup.find(class_="tw-user-nav-name").text
         if ("/showclips" in cleanLink):
