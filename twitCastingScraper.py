@@ -3,7 +3,29 @@ import csv
 import requests
 import sys
 import os
+import argparse
 
+def arguments():
+    parser = argparse.ArgumentParser(prog="twitScrape")
+
+    parser.add_argument('-l', '--link',
+                        type=str,
+                        metavar='',
+                        help="The TwitCasting channel link to scrape and get the video links")
+
+    parser.add_argument('-n', '--name',
+                        type=str,
+                        nargs='+',
+                        metavar='',
+                        help="Name of the csv file. If not specified a default name will be used.")
+
+    parser.add_argument('-o', '--output',
+                        type=str,
+                        nargs='+',
+                        help="The user's chosen absolute save path for the csv file")
+
+    args = parser.parse_args()
+    return args
 
 def soupSetup(cleanLink):
     try:
@@ -15,11 +37,18 @@ def soupSetup(cleanLink):
     return bSoup
 
 
-def linkCleanUp():
-    if(len(sys.argv) < 2):
-        url = input("URL: ")
+def linkCleanUp(args):
+    # if(len(sys.argv) < 2):
+    #     url = input("URL: ")
+    # else:
+    #     url = sys.argv[1]
+    print(args)
+    if(args is not None):
+        url = args
     else:
-        url = sys.argv[1]
+        url = input("URL: ")
+    if("https://" or "http://" not in url):
+        url = "https://" + url
     if ("/showclips" in url):
         cleanLink = url.split("/showclips")[0]
         cleanLink = cleanLink + "/showclips/"
@@ -39,6 +68,7 @@ def linkCleanUp():
             return cleanLink, "show"
     else:
         sys.exit("Invalid Link")
+    return cleanLink
 
 
 def updateLink(baseLink, pageNumber):
@@ -47,20 +77,27 @@ def updateLink(baseLink, pageNumber):
     return updatedLink
 
 
-def getDirectory():
-    if(len(sys.argv) == 4):
-        directoryPath = sys.argv[3]
+def getDirectory(args):
+    # if(len(sys.argv) == 4):
+    #     directoryPath = sys.argv[3]
+    if(args is not None and args.output):
+        directoryPath = args.output
     else:
         directoryPath = os.getcwd()
     return directoryPath
 
 
-def getFileName(soup, cleanLink):
-    if (len(sys.argv) == 3):
-        if (".csv" not in sys.argv[2]):
-            fileName = sys.argv[2] + ".csv"
+def getFileName(soup, cleanLink, args):
+    # if (len(sys.argv) == 3):
+    #     if (".csv" not in sys.argv[2]):
+    #         fileName = sys.argv[2] + ".csv"
+    #     else:
+    #         fileName = sys.argv[2]
+    if(args is not None and args.name):
+        if(".csv" not in args.name):
+            fileName = args.name + ".csv"
         else:
-            fileName = sys.argv[2]
+            fileName = args.name
     else:
         channelName = soup.find(class_="tw-user-nav-name").text
         if ("/showclips" in cleanLink):
@@ -85,7 +122,6 @@ def urlCount(soup, filter):
     pagingChildren = pagingClass.findChildren()
     totalPages = pagingChildren[len(pagingChildren)-1].text
     print("Total Pages: " + totalPages)
-
 
     if("showclips" in filter):
         btnFilter = soup.find_all("a", class_="btn")
@@ -117,27 +153,26 @@ def linkScrape(fileName, soup):
 def scrapeChannel():
     # Links extracted
     linksExtracted = 0
+    # Get commandline arguments
+    args = arguments()
     # Get the clean twitcast channel link
-    linkCleanedUp = linkCleanUp()
+    linkCleanedUp = linkCleanUp(args.link)
     channelLink = linkCleanedUp[0]
     channelFilter = linkCleanedUp[1]
     # Set up beautifulsoup
     soup = soupSetup(channelLink)
     # Get the filename
-    fileName = getFileName(soup, channelLink)
+    fileName = getFileName(soup, channelLink, args.name)
     # Get the directory path
-    directoryPath = getDirectory()
+    directoryPath = getDirectory(args.output)
     # Set the directory path
     os.chdir(os.path.abspath(directoryPath))
     # Check if the file exist and if it does delete it
     checkFile(fileName)
-    # Set the initial page to be scraped to 0
-    currentPage = 0
     # Count the total pages and links to be scraped
     countList = urlCount(soup, channelFilter)
     totalPages = countList[0]
     totalLinks = countList[1]
-    # Sleep for 1 second to allow the page to be parsed
     # Print file name
     print("Filename: " + fileName)
     for currentPage in range(int(totalPages)):
