@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-import twitCastingScraper
+import twitscrape
 from bs4 import BeautifulSoup
 import csv
 import requests
@@ -51,14 +51,15 @@ class TestClass:
         assert self.req.status_code == 200
         assert self.soup is not None
 
-        twitCastingScraper.soupSetup("https://twitcasting.tv/natsuiromatsuri/show/")
+        twitscrape.soupSetup("https://twitcasting.tv/natsuiromatsuri/show/")
         assert self.req.status_code == 200
         assert self.soup is not None
 
+    # Simulate argument input rather than system user input
     def test_linkCleanUp(self):
         # monkeypatch.setattr('builtins.input', lambda _: "Mark")
         # builtins.input = lambda: "https://twitcasting.tv/natsuiromatsuri/show/"
-        output = twitCastingScraper.linkCleanUp()
+        output = twitscrape.linkCleanUp()
         link = output[0]
         filter = output[1]
 

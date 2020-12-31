@@ -5,9 +5,9 @@ import sys
 import os
 import argparse
 
-def arguments():
-    parser = argparse.ArgumentParser(prog="twitScrape")
 
+def arguments():
+    parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--link',
                         type=str,
                         metavar='',
@@ -25,7 +25,6 @@ def arguments():
                         help="The user's chosen absolute save path for the csv file")
 
     args = parser.parse_args()
-    print(args)
     return args
 
 def soupSetup(cleanLink):
@@ -75,13 +74,7 @@ def updateLink(baseLink, pageNumber):
 
 
 def getDirectory(argOutput):
-    # if(len(sys.argv) == 4):
-    #     directoryPath = sys.argv[3]
-    if argOutput is not None:
-        print(argOutput)
-        print(" ".join(argOutput))
     if(argOutput is not None):
-        # directoryPath = argOutput[0]
         directoryPath = " ".join(argOutput)
     else:
         directoryPath = os.getcwd()
@@ -89,17 +82,12 @@ def getDirectory(argOutput):
 
 
 def getFileName(soup, cleanLink, argName):
-    # if (len(sys.argv) == 3):
-    #     if (".csv" not in sys.argv[2]):
-    #         fileName = sys.argv[2] + ".csv"
-    #     else:
-    #         fileName = sys.argv[2]
-
     if(argName is not None):
-        if(".csv" not in argName[0]):
-            fileName = "_".join(argName) + ".csv"
+        joinedName = "_".join(argName)
+        if(".csv" not in joinedName):
+            fileName = joinedName + ".csv"
         else:
-            fileName = "_".join(argName)
+            fileName = joinedName
     else:
         channelName = soup.find(class_="tw-user-nav-name").text
         if ("/showclips" in cleanLink):
@@ -129,7 +117,7 @@ def urlCount(soup, filter):
         btnFilter = soup.find_all("a", class_="btn")
         clipFilter = btnFilter[1]
         clipBtn = clipFilter.text
-        totalUrl = clipBtn.replace("Clip ","").replace("(", "").replace(")","")
+        totalUrl = clipBtn.replace("Clip ", "").replace("(", "").replace(")", "")
         print(totalUrl)
         return [totalPages, totalUrl]
     else:
