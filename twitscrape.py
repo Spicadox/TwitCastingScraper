@@ -28,6 +28,7 @@ def arguments():
     args = parser.parse_args()
     return args
 
+
 def soupSetup(cleanLink):
     try:
         url = cleanLink
@@ -138,6 +139,7 @@ def urlCount(soup, filter):
         print("Total Links: " + totalUrl)
         return [totalPages, totalUrl]
 
+
 def linkScrape(fileName, soup):
     domainName = "https://twitcasting.tv"
     linksExtracted = 0
@@ -151,6 +153,7 @@ def linkScrape(fileName, soup):
             print(hrefLink)
             csv_writer.writerow([hrefLink])
     return linksExtracted
+
 
 def scrapeChannel():
     # Links extracted

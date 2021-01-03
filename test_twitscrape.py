@@ -7,36 +7,7 @@ from unittest.mock import patch
 import csv
 import sys
 
-# class MyTestCase(unittest.TestCase):
-#     def setUp(self):
-#         self.req = requests.get("https://twitcasting.tv/natsuiromatsuri/show/")
-#         self.soup = BeautifulSoup(self.req.text, "html.parser")
-#
-#     def test_soupSetup(self):
-#         self.assertEqual(self.req.status_code, 200)
-#         self.assertTrue(self.soup)
-#
-#         twitCastingScraper.soupSetup("https://twitcasting.tv/natsuiromatsuri/show/")
-#         self.assertEqual(self.req.status_code, 200)
-#         self.assertTrue(self.soup)
-#
-#     @patch("twitCastingScraper.linkCleanUp", create=True)
-#     def test_linkCleanUp(self, mocked_input):
-#         mocked_input.side_effect = ["https://twitcasting.tv/natsuiromatsuri/show/"]
-#         link_tuple = twitCastingScraper.linkCleanUp()
-#         link = link_tuple[0]
-#         filter = link_tuple[1]
-#         self.assertEqual(twitCastingScraper.linkCleanUp()[0], "https://twitcasting.tv/natsuiromatsuri/show/")
-#         self.assertEqual(link, "https://twitcasting.tv/natsuiromatsuri/show/")
-#         self.assertEqual(filter, "show")
 
-# def test_updateLink(self):
-# def test_getDirectory(self):
-# def test_getFileName(self):
-# def test_checkFile(self):
-# def test_urlCount(self):
-# def test_linkScrape(self):
-# def test_scrapeChannel(self):
 class TestClass:
 
     def setUp(self, link):
@@ -165,6 +136,39 @@ class TestClass:
         if(len(sys.argv) > 1):
             with pytest.raises(SystemExit):
                 twitscrape.scrapeChannel()
+
+
+# Unittest Practice
+# class MyTestCase(unittest.TestCase):
+#     def setUp(self):
+#         self.req = requests.get("https://twitcasting.tv/natsuiromatsuri/show/")
+#         self.soup = BeautifulSoup(self.req.text, "html.parser")
+#
+#     def test_soupSetup(self):
+#         self.assertEqual(self.req.status_code, 200)
+#         self.assertTrue(self.soup)
+#
+#         twitCastingScraper.soupSetup("https://twitcasting.tv/natsuiromatsuri/show/")
+#         self.assertEqual(self.req.status_code, 200)
+#         self.assertTrue(self.soup)
+#
+#     @patch("twitCastingScraper.linkCleanUp", create=True)
+#     def test_linkCleanUp(self, mocked_input):
+#         mocked_input.side_effect = ["https://twitcasting.tv/natsuiromatsuri/show/"]
+#         link_tuple = twitCastingScraper.linkCleanUp()
+#         link = link_tuple[0]
+#         filter = link_tuple[1]
+#         self.assertEqual(twitCastingScraper.linkCleanUp()[0], "https://twitcasting.tv/natsuiromatsuri/show/")
+#         self.assertEqual(link, "https://twitcasting.tv/natsuiromatsuri/show/")
+#         self.assertEqual(filter, "show")
+
+# def test_updateLink(self):
+# def test_getDirectory(self):
+# def test_getFileName(self):
+# def test_checkFile(self):
+# def test_urlCount(self):
+# def test_linkScrape(self):
+# def test_scrapeChannel(self):
 
 
 if __name__ == '__main__':
