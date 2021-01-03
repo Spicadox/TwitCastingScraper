@@ -75,15 +75,25 @@ def updateLink(baseLink, pageNumber):
 
 def getDirectory(argOutput):
     if(argOutput is not None):
-        directoryPath = " ".join(argOutput)
+        # if(" " in argOutput):
+        #     directoryPath = " ".join(argOutput)
+        # else:
+        #     directoryPath = argOutput
+        directoryPath = argOutput
     else:
         directoryPath = os.getcwd()
     return directoryPath
 
 
 def getFileName(soup, cleanLink, argName):
+    #Add special character exception
     if(argName is not None):
-        joinedName = "_".join(argName)
+        joinedName = argName
+        # Does nothing
+        # if(" " in argName):
+        #     joinedName = "_".join(argName)
+        if (".csv" not in joinedName and isinstance(joinedName, list)):
+            fileName = joinedName.append(".csv")
         if(".csv" not in joinedName):
             fileName = joinedName + ".csv"
         else:
@@ -99,6 +109,7 @@ def getFileName(soup, cleanLink, argName):
         else:
             fileName = channelName.strip() + "_urls.csv"
             return fileName
+    fileName = "".join(fileName)
     return fileName
 
 
@@ -156,7 +167,14 @@ def scrapeChannel():
     # Get the directory path
     directoryPath = getDirectory(args.output)
     # Set the directory path
-    os.chdir(os.path.abspath(directoryPath))
+    try:
+        if isinstance(directoryPath, list):
+            os.chdir(os.path.abspath(directoryPath[0]))
+        else:
+            os.chdir(os.path.abspath(directoryPath))
+    except Exception as e:
+        # sys.exit("Error setting output directory")
+        sys.exit(e)
     # Check if the file exist and if it does delete it
     checkFile(fileName)
     # Count the total pages and links to be scraped
