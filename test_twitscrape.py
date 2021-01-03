@@ -1,6 +1,3 @@
-import twitscrape
-from bs4 import BeautifulSoup
-import requests
 import requests
 from bs4 import BeautifulSoup
 import pytest
