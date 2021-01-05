@@ -9,6 +9,10 @@ An executable version of the script is provided where it request the TwitCasting
 
 Requires the nonbinary library [BeautifulSoup](https://pypi.org/project/beautifulsoup4/)
 
+A requirements text file has been included and the command `pip3 install -r requirements.txt` (or pip) can be used to install BeautifulSoup.
+
+Note: The installation of BeautifulSoup is not required for the executable file.
+
 
 ### Options and Usages
 ```
