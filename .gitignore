@@ -1,2 +1,5 @@
 # Ignore csv files
 *.csv
+.idea
+.pytest_cache
+
