@@ -7,6 +7,8 @@ import os
 import argparse
 
 
+# Adds a link, name, and output argument
+# Returns the arguments
 def arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--link',
@@ -29,6 +31,7 @@ def arguments():
     return args
 
 
+# Set up the soup and return it while requiring a link as an argument
 def soupSetup(cleanLink):
     try:
         url = cleanLink
@@ -39,6 +42,8 @@ def soupSetup(cleanLink):
     return bSoup
 
 
+# Takes -l argument and "sanitize" url
+# Returns the "sanitized" url
 def linkCleanUp(argLink):
     if(argLink is not None):
         url = argLink
@@ -69,12 +74,16 @@ def linkCleanUp(argLink):
     return cleanLink
 
 
+# Function takes in two arguments: the base link and page number
+# Returns a new link by contacting base link and page number
 def updateLink(baseLink, pageNumber):
     baseLink = baseLink
     updatedLink = baseLink + str(pageNumber)
     return updatedLink
 
 
+# Function takes in a directory path argument
+# Returns user specified directory path, else a default path is provided
 def getDirectory(argOutput):
     if(argOutput is not None):
         # if(" " in argOutput):
@@ -87,6 +96,8 @@ def getDirectory(argOutput):
     return directoryPath
 
 
+# Function takes in 3 arguments: soup, sanitized link, and user input file name
+# Returns a proper filename for the csv file based on user input
 def getFileName(soup, cleanLink, argName):
     #Add special character exception
     if(argName is not None):
@@ -115,11 +126,16 @@ def getFileName(soup, cleanLink, argName):
     return fileName
 
 
+# Function takes in the file name and check if it exists
+# If the file exists, then remove it(replace the file)
 def checkFile(fileName):
     if(os.path.isfile(fileName)):
         os.remove(fileName)
 
 
+# Function that takes in two arguments: soup, and a filter of "show" or "showclips"
+# Find the total page and gets the total link available to be scraped
+# Returns a list that holds the total pages and total url available to be scraped
 def urlCount(soup, filter):
     pagingClass = soup.find(class_="paging")
     pagingChildren = pagingClass.findChildren()
@@ -140,6 +156,9 @@ def urlCount(soup, filter):
         return [totalPages, totalUrl]
 
 
+# Function takes two arguments: the file name and soup
+# Scrapes the video urls and write it into a csv file
+# Returns the number of video url extracted for that page
 def linkScrape(fileName, soup):
     domainName = "https://twitcasting.tv"
     linksExtracted = 0
@@ -155,6 +174,8 @@ def linkScrape(fileName, soup):
     return linksExtracted
 
 
+# Function that scrapes the entire channel while printing out
+# various information onto the console
 def scrapeChannel():
     # Links extracted
     linksExtracted = 0
